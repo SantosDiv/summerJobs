@@ -53,7 +53,7 @@ A função `createStore`, de forma intuitiva, cria a nossa *Store*, cria o armá
 
 Mas o que significa o `combineReducers` e o `rootReducer`? Iremos entrar neles em seguida :D.
 
-- Fixação:
+- Exercício de fixação:
 **Ajude o Ash: Onde ele está errando na criação da store? E depois salve o arquivo correto numa pasta chamada: store**
 ```javascript
 import { combineReducers } from 'react-redux';
