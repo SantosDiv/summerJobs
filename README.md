@@ -29,7 +29,7 @@ Para ilustramos o conceito do redux unido ao React, vamos imaginar que você  es
 ### Instalando as bibliotecas
 Antes de iniciarmos a explicação em si, é importante instalarmos as bibliotecas que nos auxiliarão na criação do nosso estado global. No terminal da sua aplicação digite o seguinte comando:
 ```sh
-	npm i redux react-redux --save
+  npm i redux react-redux --save
 ```
 Agora com tudo instalado, podemos continuar :D
 
@@ -40,13 +40,13 @@ Você vê o local, e nele tem um grande **armário**, que é dividido em vários
 
 Para a nossa sorte, um desenvolvedor já havia criado este espaço para nos receber. Este espaço em *Redux* se chama **Store**. Ele nada mais é que o local (*armário*) onde ficará guardado todos os dados (*sacolas*) que enviaremos (*guardaremos*), para que, quando você precisar, possa ter fácil acesso e pega-los de volta. Veja como ele fez:
 ```javascript
-	// Importando as funções e arquivos necessários
-	import { createStore, combineReducers }  from 'redux';
-	import rootReducer from '../reducers';
-	// Criando o store
-	const store = createStore(combineReducers(rootReducer));
-	// exportando o store
-	export default store;
+// Importando as funções e arquivos necessários
+import { createStore, combineReducers }  from 'redux';
+import rootReducer from '../reducers';
+// Criando o store
+const store = createStore(combineReducers(rootReducer));
+// exportando o store
+export default store;
 
 ```
 A função `createStore`, de forma intuitiva, cria a nossa *Store*, cria o armário, da nossa aplicação. Nós a guardamos em uma variável chamada `store`, pois iremos precisar dela em outro arquivo da nossa aplicação.
@@ -56,12 +56,12 @@ Mas o que significa o `combineReducers` e o `rootReducer`? Iremos entrar neles e
 - Fixação:
 **Ajude o Ash: Onde ele está errando na criação da store? E depois salve o arquivo correto numa pasta chamada: store**
 ```javascript
-  import { combineReducers } from 'react-redux';
-  import createStore from '../reducers';
+import { combineReducers } from 'react-redux';
+import createStore from '../reducers';
 
-  const store = createStore(combineReducers());
+const store = createStore(combineReducers());
 
-  export default sotre;
+export default sotre;
 ```
 
 
@@ -74,25 +74,25 @@ Ou seja, assim como no Shopping, onde você só consegue adicionar ou retirar al
 Mas como fazemos isso em React? Veja:
 
 ```javascript
-	// Estado inicial
-	const INITIAL_STATE = {
-		squares: [],
+// Estado inicial
+const INITIAL_STATE = {
+  squares: [],
+};
+// Reducer
+const luggageStorageReducer = (state = INITIAL_STATE, action) => {
+    switch (action.type) {
+      case 'add': // Condição de adicionar sacolas
+	return {
+	  ...state,
+	  squares: [...state.squares, action.item],
 	};
-	// Reducer
-	const luggageStorageReducer = (state = INITIAL_STATE, action) => {
-		switch (action.type) {
-		  case 'add': // Condição de adicionar sacolas
-		    return {
-			  ...state,
-			  squares: [...state.squares, action.item],
-			};
-		  case 'remove': // Condição de remover sacolas
-			return {
-			  ...state,
-			  squares: action.item,
-			};
-		}
+      case 'remove': // Condição de remover sacolas
+	return {
+	  ...state,
+	  squares: action.item,
 	};
+    }
+};
 ```
 Entendendo o código:
 Nós iniciamos o estado do nosso armário, onde vai ficar todas as sacolas de todas as pessoas que chegarem no shopping e quiserem adcionar elas lá. Chamamos essa variável de `INITIAL_STATE`.
@@ -113,15 +113,15 @@ Para fazer essa combinação fazemos uso do `combineReducers()` passando como pa
 
 - criando o rootReducer:
 ```javascript
-  import reducer1 from '../reducer/reducer1';
-  import reducer2 from '../reducer/reducer2';
+import reducer1 from '../reducer/reducer1';
+import reducer2 from '../reducer/reducer2';
+...
+const rootReducer = {
+  reducer1,
+  reducer2,
   ...
-  const rootReducer = {
-    reducer1,
-    reducer2,
-    ...
-  };
-  export default rootReducer;
+};
+export default rootReducer;
 ```
 Depois basta colocar o rootReducer dentro do combineReducers():
 `createStore(combineReducers(rootReducer))`.
