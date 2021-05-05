@@ -344,3 +344,8 @@ Informações adicionais:
   requests: [{ food: 'Filé com Queijo', price: 40 }, ...],
 }
 ```
+
+## Recursos Adicionais - Opcional
+- [Funções Puras](https://medium.com/devzera/o-que-%C3%A9-uma-fun%C3%A7%C3%A3o-pura-em-javascript-2b34edcad8e2)
+- [Documentação React Redux - Getting Started](https://react-redux.js.org/introduction/getting-started)
+- [Redux - Performance](https://redux.js.org/faq/performance)
