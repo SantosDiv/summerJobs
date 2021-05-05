@@ -81,16 +81,18 @@ Mas como fazemos isso em React? Veja:
 	// Reducer
 	const luggageStorageReducer = (state = INITIAL_STATE, action) => {
 		switch (action.type) {
-		  case 'add': // Condição de adicionar sacolas
+		  case 'ADD': // Condição de adicionar sacolas
 		    return {
 			  ...state,
 			  squares: [...state.squares, action.item],
 			};
-		  case 'remove': // Condição de remover sacolas
+		  case 'REMOVE': // Condição de remover sacolas
 			return {
 			  ...state,
 			  squares: action.item,
 			};
+          default:
+            return state;
 		}
 	};
 ```
@@ -139,7 +141,7 @@ Finalmente você pode pedir para guardar suas sacolas. Para isso, a pessoa atend
 Escrevendo uma action para adicionar um novo item ao store:
 ```javascript
   const addStorage = (item) => ({
-    type: 'add',
+    type: 'ADD',
     item,
   });
 ```
@@ -268,3 +270,54 @@ Entendendo o código acima:
  > Particularidades da função connect: Se caso você for usar apenas o mapDispatchToProps, é preciso colocar o parâmetro `null` onde seria o stateToProps: `connect(null, mapDispatchToProps)`. Mas se for usar apenas o mapStateToProps, não é preciso colocar o `mapDispatchToProps`: `connect(mapStateToProps)`.
 
 - Exercício de Fixação: **Faça com que ao clicar no botão `Show/Hide` o nome apareca ou desapareça da tela. Caso não tenha nome cadastrado no estado global, coloque a mensagem: `Não há um nome cadastrado`. (Use o `mapStateToProps` para isso).**.
+
+## Exercícios
+### Exercício - O restaurante
+Você foi chamado pelo dono do restaurante `DellyCious` para resolver um problema de comunicação de pedidos que ele vem enfrentando. Ele está precisando que os pedidos que o caixa cadastrar na tela dele, caia direto na tela do cozinheiro. Assim não terá problema de pedidos errados e todos ficarão felizes.
+
+*Sua missão é a seguinte:* Utilizando o Redux unido ao React, criar dois componentes: `Caixa` e `Cozinha`, onde você mandará a informação, partindo do `Caixa`, para o estado global, e a `Cozinha` irá consumir essa informação cadastrada nele.
+
+Informações importantes:
+- O restaurante tem, por enquanto, 3 opções de pratos: **Filé com queijo**, **Feijão tropeiro**, **Arroz de leite com carne de sol**. Serão essas opções que serão mostrados na tela do `Caixa` e que aparecerão na `Cozinha`.
+- O componente `Caixa` é irmão do componente `Cozinha`. Ou seja, não tem ligação direta entre eles.
+- Crie um botão: **Dispachar Pedido** para que quando clicado o pedidos feitos sejam enviados para o estado global.
+
+O que espera-se encontar? **Store**, **Reducer**, **Actions**, **Provider**, **mapDispatchToProps**, **mapStateToProps**;
+
+Dicas:
+- Crie um diretório para o Redux, com uma pasta para o Store, Reducers e as Actions;
+- Utilize botões para as opções de pratos;
+- Utilize o estado do componente para guardar temporariamente os pedidos clicados;
+- Exemplo do estado do reducer:
+```javascript
+{
+  requests: [{ food: 'Filé com Queijo' }, ...],
+}
+```
+
+### Exercício Bônus
+Utiliziando o que você criou no exercício anterior, faça o seguinte:
+- Adicione os preços dos pratos no componente `Caixa` em uma tabela de preços;
+- Crie um novo componente chamado `NotaFiscal`, nele você vai colocar as informações do pedido do cliente. Veja o exemplo de saída:
+```javascript
+'Nota Fiscal -- Restaurante DellyCious'
+'Nome-do-prato - R$ 30,00'
+'Nome-do-prato - R$ 12,00'
+'Nome-do-prato - R$ 10,00'
+'Total  ---  R$ 52,00'
+```
+- Utilizando ainda o Redux, adicione os pratos e seus respectivos preços no estado global e exiba essas informações no componente `NotaFiscal`.
+
+Informações adicionais:
+- Os preços dos pratos são:
+```javascript
+  'Filé com Queijo - R$ 40,00'
+  'Feijão tropeiro - R$ 25,00'
+  'Arroz de Leite com carne de sol - R$ 20,00'
+```
+- Exemplo do estado do reducer:
+```javascript
+{
+  requests: [{ food: 'Filé com Queijo', price: 40 }, ...],
+}
+```
