@@ -53,6 +53,19 @@ A função `createStore`, de forma intuitiva, cria a nossa *Store*, cria o armá
 
 Mas o que significa o `combineReducers` e o `rootReducer`? Iremos entrar neles em seguida :D.
 
+*Dica Show: Para visualizar o seu estado global, você pode utilizar uma biblioteca chamada `redux-devtools-extension`, basta instala-la com o `npm install redux-devtools-extension` e adicionar ela a sua store. Observe:*
+```javascript
+import { createStore, combineReducers } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension'; // EXTENSÃO
+import rootReducer from '../reducers';
+
+const store = createStore(combineReducers(rootReducer), composeWithDevTools()); // CREATE RECEBENDO A EXTENÇÃO
+
+export default store;
+
+```
+*Agora, vá no seu chrome e instale a extensão: `Redux DevTools`, prontinho! Assim você vai conseguir acompanhar a sua store, enquanto você desenvolve.*
+
 - Exercício de fixação:
 **Ajude o Ash: Onde ele está errando na criação da store? E depois salve o arquivo correto numa pasta chamada: store**
 ```javascript
@@ -78,33 +91,23 @@ Mas como fazemos isso em React? Veja:
 const INITIAL_STATE = {
   squares: [],
 };
-// Reducer
-const luggageStorageReducer = (state = INITIAL_STATE, action) => {
+  // Reducer
+  const luggageStorageReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-      case 'add': // Condição de adicionar sacolas
-	return {
-	  ...state,
-	  squares: [...state.squares, action.item],
-	};
-	// Reducer
-	const luggageStorageReducer = (state = INITIAL_STATE, action) => {
-		switch (action.type) {
-		  case 'ADD': // Condição de adicionar sacolas
-		    return {
-			  ...state,
-			  squares: [...state.squares, action.item],
-			};
-		  case 'REMOVE': // Condição de remover sacolas
-			return {
-			  ...state,
-			  squares: action.item,
-			};
+      case 'ADD': // Condição de adicionar sacolas
+        return {
+        ...state,
+        squares: [...state.squares, action.item],
+      };
+      case 'REMOVE': // Condição de remover sacolas
+      return {
+        ...state,
+        squares: action.item,
+      };
           default:
             return state;
-		}
-	};
     }
-};
+  };
 ```
 Entendendo o código:
 Nós iniciamos o estado do nosso armário, onde vai ficar todas as sacolas de todas as pessoas que chegarem no shopping e quiserem adcionar elas lá. Chamamos essa variável de `INITIAL_STATE`.
@@ -206,11 +209,13 @@ Veja que ela recebe um parâmetro que chamamos de `item`, que é o item que quer
 
 **Usando a função add()**
 ```javascript
-  import { addStorage } from '../actions';
+import React from 'react';
+import { addStorage } from '../actions';
 
-  export function storageLaunch({ add }) {
+class StorageLaunch extends React.Component {
+  render() {
+    const { add } = this.props;
     const item = { id: 0, object: 'sacolas', persona: 'Marcos' }
-
     return (
       <div>
         <h1>Bem vindo! O que deseja fazer? Guardar, Retirar ou saber o estoque?</h1>
@@ -220,9 +225,13 @@ Veja que ela recebe um parâmetro que chamamos de `item`, que é o item que quer
     );
   }
 
-  const mapDispatchToProps = (dispatch) => ({
-    add: (item) => dispatch(addStorage(item));
-  });
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  add: (item) => dispatch(addStorage(item));
+});
+
+export default connect(null, mapDispatchToProps)(StorageLaunch);
 ```
 Veja que a função `add` é recebida como props, de forma 'Mágica' o Redux faz isso para nós e são passados para os nossos componentes como props.
 
@@ -262,19 +271,23 @@ Entendendo o código acima:
  Da mesma forma que o dispatch, aqui você te acesso a esses dados através de props, e então de forma simples consegue utiliza-los na sua aplicação. Veja um exemplo:
 
  ```javascript
-  function Stock({ squares }) {
+ import React from 'react';
+class Stock extends React.Component {
+  render() {
+    const { squares } = this.props;
     return (
       <div>
         <h1>Acabei de contar aqui e temos { 100 - squares.lenght } containers disponíveis </h1>
       </div>
     );
   }
+}
 
-  const mapStateToProps = (state) => ({
-    squares: state.luggageStorageReducer.squares,
-  });
+const mapStateToProps = (state) => ({
+  squares: state.luggageStorageReducer.squares,
+});
 
-  export default connect(mapStateToProps)(Stock);
+export default connect(mapStateToProps)(Stock);
  ```
 
  > Particularidades da função connect: Se caso você for usar apenas o mapDispatchToProps, é preciso colocar o parâmetro `null` onde seria o stateToProps: `connect(null, mapDispatchToProps)`. Mas se for usar apenas o mapStateToProps, não é preciso colocar o `mapDispatchToProps`: `connect(mapStateToProps)`.
